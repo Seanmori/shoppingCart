@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>jq购物车</title>
+</head>
+<body>
+	<h1>查看购物车</h1>
+	<div>
+		<span>商品编号</span>
+		<span>图片</span>
+		<span>描述</span>
+		<span>单价</span>
+		<span>数量</span>
+		<span>小计</span>
+		<span>操作</span>
+	</div>
+	<div class="cart_body"></div>
+
+	<script type="text/javascript" src="lib/jquery/jquery-1.12.4.min.js"></script>
+	<script type="text/javascript" src="lib/jquery_plugins/jquery.cookie.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			$.cookie.json = true;
+			var _products = $.cookie("products") || [];
+			if (_products.length === 0) {
+				alert("购物车内没有商品，返回商品页面...");
+				location = "products.html";
+			}
+			$.each(_products, function (index, element) {
+				$("div:first")
+					.clone(true)
+				  	.children().first().text(this.id)
+					.next().html('<img src="'+ this.imgSrc +'">')
+					.next().text(this.name)
+					.parent().eq(3).text(this.price).end()
+					.find("span").eq(-3).text(this.amount)
+					.next().text(this.price * this.amount)
+					.parent().children().last().html("<a href='javascript:void(0);'>删除此商品</a>")
+					.parent()
+					.appendTo(".cart_body");
+			})
+		});
+
+	</script>
+</body>
+</html>

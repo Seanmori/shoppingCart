@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>jq购物车</title>
+</head>
+<body>
+	<div id="container">
+		<div class="product">
+			<input type="hidden" value="1" class="prod_id">
+			<img src="images/1.jpg" class="prod_img">
+			<span class="prod_title">OPPO R11 Plus 6GB+64GB内存版 全网通4G手机 双卡双待</span>
+			<span class="prod_price">999.00</span>
+			<a href="">加入购物车</a>
+		</div>
+		<div class="product">
+			<input type="hidden" value="2" class="prod_id">
+			<img src="images/2.jpg" class="prod_img">
+			<span class="prod_title">华为P10 手机 草木绿色 全网通(4GB RAM+128GB ROM)</span>
+			<span class="prod_price">3999.00</span>
+			<a href="">加入购物车</a>
+		</div>
+		<div class="product">
+			<input type="hidden" value="3" class="prod_id">
+			<img src="images/3.jpg" class="prod_img">
+			<span class="prod_title">华为 荣耀8 青春版 手机 幻海蓝 全网通4G+64G</span>
+			<span class="prod_price">1999.00</span>
+			<a href="">加入购物车</a>
+		</div>
+	</div>
+
+	<a href="cart_artTemplate.html" target="_blank">查看购物车</a>
+
+	<script type="text/javascript" src="lib/jquery/jquery-1.12.4.min.js"></script>
+	<script type="text/javascript" src="lib/jquery_plugins/jquery.cookie.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			$("#container a").click(function () {
+				var row = $(this).parent(".product");
+				var product = {
+					id : row.children().first().val(),
+					imgSrc : row.children(".prod_img").attr("src"),
+					name : row.children().eq(2).text(),
+					price : row.children().eq(-2).html(),
+					amount : 1
+				};
+				$.cookie.json = true;
+				var products = $.cookie("products") || []; 
+				console.log(products);
+				var index = isExist(product.id, products);
+				if (index === -1) {
+					products.push(product);
+				} else {
+					products[index].amount++;
+				}
+				$.cookie("products", products, {expires:3});
+				return false;
+			});
+
+			function isExist(id, products) {
+				for (var i = 0, len = products.length; i < len; i++) {
+					if (products[i].id == id) {
+						return i;
+					}
+				}
+				return -1;
+			}
+		});
+	</script>
+
+</body>
+</html>
